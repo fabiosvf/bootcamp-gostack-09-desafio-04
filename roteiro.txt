@@ -1,0 +1,228 @@
+yarn init -y
+yarn add @babel/core @babel/preset-env @babel/preset-react webpack webpack-cli -D
+yarn add react react-dom
+yarn add babel-loader -D
+yarn add webpack-dev-server -D
+yarn add style-loader css-loader -D
+yarn add file-loader -D
+yarn add @babel/plugin-proposal-class-properties -D
+yarn add prop-types
+yarn add eslint
+yarn add prettier eslint-config-prettier eslint-plugin-prettier babel-eslint -D
+
+
+
+
+********************************************************
+yarn eslint --init
+********************************************************
+How would you like to use ESLint?
+- To check syntax, find problems, and enforce code style
+
+What type of modules does your project use?
+- JavaScript modules (import/export)
+
+Which framework does your project use?
+- React
+
+Does your project use TypeScript?
+- No
+
+Where does your code run?
+- Browser
+
+Use a popular style guide
+- Use a popular style guide
+
+Which style guide do you want to follow?
+- Airbnb (https://github.com/airbnb/javascript)
+
+What format do you want your config file to be in?
+- JavaScript
+
+Would you like to install them now with npm?
+- Yes
+********************************************************
+Excluir o arquivo package-lock.json
+Executar o comando:
+yarn
+********************************************************
+Aplicar o ESLint em todos os arquivos com a extenção JS
+dentro da pasta SRC
+
+yarn eslint --fix src --ext .js
+********************************************************
+
+
+
+
+
+********************************************************
+.editorconfig
+********************************************************
+
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+********************************************************
+.eslintrc.js
+********************************************************
+
+module.exports = {
+  env: {
+    browser: true,
+    es6: true,
+  },
+  extends: [
+    'airbnb-base',
+    'prettier',
+    'prettier/react',
+    'plugin:react/recommended',
+  ],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+  parser: 'babel-eslint',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 2018,
+    sourceType: 'module',
+  },
+  plugins: ['react', 'prettier'],
+  rules: {
+    'prettier/prettier': 'error',
+    'react/jsx-filename-extension': ['warn', { extensions: ['.js', '.jsx'] }],
+    'import/prefer-default-export': 'off',
+    'jsx-quotes': ['error', 'prefer-double'],
+    'class-methods-use-this': 'off',
+    'no-param-reassign': 'off',
+    camelcase: 'off',
+    'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
+  },
+};
+
+********************************************************
+.prettierrc
+********************************************************
+
+{
+  "singleQuote": true,
+  "trailingComma": "es5"
+}
+
+********************************************************
+.prettierrc.json
+********************************************************
+
+{
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "jsxSingleQuote": true
+}
+
+********************************************************
+babel.config.js
+********************************************************
+
+module.exports = {
+  presets: [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
+  plugins: [
+    "@babel/plugin-proposal-class-properties"
+  ]
+};
+
+********************************************************
+package.json
+********************************************************
+
+{
+  "name": "desafio04",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --mode development",
+    "dev": "webpack-dev-server --mode development"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-react": "^7.7.4",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.3.2",
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "file-loader": "^5.0.2",
+    "prettier": "^1.19.1",
+    "style-loader": "^1.0.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  }
+}
+
+********************************************************
+webpack.config.js
+********************************************************
+
+const path = require('path');
+
+module.exports = {
+  entry: path.resolve(__dirname, 'src', 'index.js'),
+  output: {
+    path: path.resolve(__dirname, 'public'),
+    filename: 'bundle.js'
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, 'public'),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }, {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+        ]
+      }, {
+        test: /.*\.(gif|png|jpe?g)$/i,
+        use: {
+          loader: 'file-loader'
+        }
+      }
+    ]
+  }
+};
